@@ -1,0 +1,17 @@
+body {
+  background-color: skyblue;
+  margin: 10px 20px; /* 10px for top/bottom, 20px for left/right */
+}
+.product-cover {
+  width: 50px; /* Set the width of the image */
+  height: 50px; /* Set the height of the image (should match the width for a perfect circle) */
+  object-fit: cover; /* Ensure the image scales and crops properly */
+  border-radius: 50%; /* Make the image round */
+  border: 2px solid #ccc; /* Optional: Add a border for styling */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+a {
+  text-decoration: none; /* Removes the underline */
+  color: blue; /* Optional: Set your desired link color */
+}

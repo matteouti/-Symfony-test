@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %} {% block title %}Product index{% endblock %} {%
+block body %}
+<h1>Product list</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Cover</th>
+      <th>Stock</th>
+      <th>actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products %}
+    <tr>
+      <td>{{ product.id }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.description | slice(0, 50) ~ '...' }}</td>
+      <td>{{ product.price }}</td>
+      {% if product.cover %}
+      <td>
+        <img
+          src="{{ asset('uploads/' ~ product.cover) }}"
+          alt="{{ product.name }}"
+          width="50"
+          height="50"
+          class="product-cover"
+        />
+      </div>
+      {% else %} 
+        <p>No cover image available.</p>
+      {% endif %}
+     </td>
+      <td>{{ product.stock }}</td>
+      <td>
+        <a href="{{ path('app_product_show', { id: product.id }) }}"  class="btn btn-outline-info">Show</a>
+        <a href="{{ path('app_product_edit', { id: product.id }) }}"  class="btn btn-outline-secondary">Edit</a>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="7">no records found</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<button type="button" class="btn btn-primary">
+    <a href="{{ path('app_product_new') }}" style="color: bisque">Create new</a>
+  </button>
+{% endblock %}
