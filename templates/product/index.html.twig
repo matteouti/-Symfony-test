@@ -3,18 +3,21 @@ block body %}
 
 <div class="row">
   <div class="col-8">
-   <h5> Product list |</h5>
+    <h5>Product list |</h5>
+
+    {% if 'ROLE_ADMIN' in app.user.roles %}
     <button type="button" class="btn btn-primary">
-      <a href="{{ path('app_product_new') }}" style="color: bisque">Create new</a>
+      <a href="{{ path('app_product_new') }}" style="color: bisque"
+        >Create new</a
+      >
     </button>
+    {% endif %}
   </div>
   <div class="col-4">
     Logged in as: <strong>{{ app.user.userIdentifier }}</strong> |
     <a href="{{ path('app_logout') }}" class="btn btn-primary">Logout</a>
   </div>
 </div>
-
-
 
 <table class="table">
   <thead>
@@ -25,7 +28,8 @@ block body %}
       <th>Price</th>
       <th>Cover</th>
       <th>Stock</th>
-      <th>actions</th>
+      <th>Created by</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -35,8 +39,8 @@ block body %}
       <td>{{ product.name }}</td>
       <td>{{ product.description | slice(0, 50) ~ '...' }}</td>
       <td>{{ product.price }}</td>
-      {% if product.cover %}
       <td>
+        {% if product.cover %}
         <img
           src="{{ asset('uploads/' ~ product.cover) }}"
           alt="{{ product.name }}"
@@ -44,28 +48,48 @@ block body %}
           height="50"
           class="product-cover"
         />
-      </div>
-      {% else %} 
+        {% else %}
         <p>No cover image available.</p>
-      {% endif %}
-     </td>
+        {% endif %}
+      </td>
       <td>{{ product.stock }}</td>
+      <td>{{ product.createdBy ? product.createdBy.username : " - " }}</td>
       <td>
         <div style="display: flex; gap: 10px; align-items: center">
-          <a href="{{ path('app_product_show', { id: product.id }) }}"  class="btn btn-outline-info">Show</a>
-          <a href="{{ path('app_product_edit', { id: product.id }) }}"  class="btn btn-outline-primary">Edit</a>
+          <a
+            href="{{ path('app_product_show', { id: product.id }) }}"
+            class="btn btn-info"
+            >Show</a
+          >
+
+          {% if app.user and (product.createdBy and app.user.username ==
+          product.createdBy.username or 'ROLE_ADMIN' in app.user.roles) %}
+
+          <a
+            href="{{ path('app_product_edit', { id: product.id }) }}"
+            class="btn btn-primary"
+            >Edit</a
+          >
           {{ include("product/_delete_form.html.twig") }}
+          {% else %}
+
+          <button type="button" class="btn btn-outline-primary" disabled>
+            Edit
+          </button>
+          <button type="button" class="btn btn-outline-secondary" disabled>
+            Delete
+          </button>
+
+          {% endif %}
         </div>
       </td>
     </tr>
     {% else %}
     <tr>
-      <td colspan="7">no records found</td>
+      <td colspan="8">No records found</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
-
-
 
 {% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -37,6 +39,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Equatab
     #[ORM\Column(nullable: true)]
     private ?bool $is_young = null;
 
+    /**
+     * @var Collection<int, Product>
+     */
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'createdBy')]
+    private Collection $products;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
+    public function __toString(): string
+    {
+        return $this->username; // ou $this->firstname
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,7 +86,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Equatab
     public function getRoles(): array
     {
         $roles= $this->roles;
-
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -127,6 +143,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Equatab
     public function setIsYoung(?bool $is_young): static
     {
         $this->is_young = $is_young;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            // set the owning side to null (unless already changed)
+            if ($product->getCreatedBy() === $this) {
+                $product->setCreatedBy(null);
+            }
+        }
 
         return $this;
     }

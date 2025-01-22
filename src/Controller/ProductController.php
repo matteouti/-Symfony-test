@@ -25,6 +25,7 @@ final class ProductController extends AbstractController
     #[Route(name: 'app_product_index', methods: ['GET'])]
     public function index(ProductRepository $productRepository): Response
     {
+        //dd($productRepository->findAll());
         return $this->render('product/index.html.twig', [
             'products' => $productRepository->findAll(),
         ]);
@@ -45,7 +46,7 @@ final class ProductController extends AbstractController
                 $product->setCover($newFilename);
             }
 
-        
+            $product->setCreatedBy($this->getUser());
             $this->productServices->save($product);
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
            
