@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello OrdersController!{% endblock %}
+
+{% block body %}
+
+
+    <div class="container-fluid">
+
+         <table class="table">
+            <thead>
+                <tr>
+                    <th>Commande</th>
+                    <th>Produits</th>
+                    <th>Cover</th>
+                    <th>User</th>
+                    <th class="text-center">Date</th>
+                    <th class="text-center">Quantité</th>
+                    <th>Prix/Unitaire</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+             <tbody>
+             {% for order in orders %}
+                <tr>
+                    <th>{{ order.id }}</th>
+                    <th>{{ order.products.name }}</th>
+                    <th>
+                        {% if order.products.cover %}
+                            <img
+                                    src="{{ asset('uploads/' ~ order.products.cover) }}"
+                                    alt="{{ order.products.name }}"
+                                    width="50"
+                                    height="50"
+                                    class="product-cover"
+                            />
+                        {% else %}
+                            <p>No cover.</p>
+                        {% endif %}
+                    </th>
+                    <th>{{ order.orders.users }}</th>
+                    <th class="text-center">{{ order.orders.createdAt|date('Y-m-d') }}</th>
+                    <th class="text-center">{{ order.stock }}</th>
+                    <th>{{ order.price }} Ar</th>
+                    <th>{{ order.stock * order.price }} Ar</th>
+                </tr>
+             {% endfor %}
+             </tbody>
+         </table>
+    </div>
+{% endblock %}

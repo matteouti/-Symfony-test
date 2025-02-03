@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+use App\Entity\OrdersDetails;
 use App\Services\ProductServices;
 use App\Entity\Product;
 use App\Form\ProductType;
@@ -18,7 +19,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 final class ProductController extends AbstractController
 {
 
-    public function __construct(private ProductServices $productServices)
+    public function __construct(private ProductServices $productServices )
     {
     }
     
@@ -28,6 +29,15 @@ final class ProductController extends AbstractController
         //dd($productRepository->findAll());
         return $this->render('product/index.html.twig', [
             'products' => $productRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/shop', name: 'product_shop_list')]
+    public function list(ProductRepository $productRepository): Response {
+      //  $products = $this->productRepository->findAll();
+        
+        return $this->render('shop/list.html.twig', [
+            'products' => $productRepository->findAll()
         ]);
     }
 

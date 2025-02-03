@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %} {% block title %}Shop{% endblock %} {% block body
+%}
+  {% include 'partials/navbar.html.twig' %}
+
+<div class="container mt-100">
+  <div class="row">
+    {% for product in products %}
+    <div class="col-md-4 col-sm-6">
+      <div class="card mb-30">
+        <a class="card-img-tiles" href="#" data-abc="true">
+          <div class="inner">
+            <div class="main-img">
+              {% if product.cover %}
+              <img
+                src="{{ asset('uploads/' ~ product.cover) }}"
+                alt="Category"
+                class="product-image"
+              />
+              {% else %}
+              <div class="fallback-image">Pas d'image</div>
+              {% endif %}
+            </div>
+          </div></a
+        >
+        <div class="card-body text-center">
+          <h4 class="card-title">{{ product.name }}</h4>
+          <p class="text-muted">{{ product.price|number_format(2) }} Ar</p>
+          <p class="text-muted">
+            {{ product.description|slice(0, 20) }}{% if
+            product.description|length > 100 %}...{% endif %}
+          </p>
+          <p class="text-muted">Stock: {{ product.stock ?: 0 }}</p>
+
+
+          {% if product.stock is not null and product.stock > 0 %}
+            <a class="btn btn-primary btn-sm" href="{{ path('cart_add', { id: product.id }) }}" data-abc="true"
+            >Add to cart</a
+            >
+          {% else %}
+            <button class="btn btn-secondary btn-sm" disabled>Out of Stock</button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

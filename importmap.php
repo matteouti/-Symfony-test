@@ -39,4 +39,17 @@ return [
         'version' => '1.11.3',
         'type' => 'css',
     ],
+    'datatables.net' => [
+        'version' => '2.2.1',
+    ],
+    'jquery' => [
+        'version' => '3.7.1',
+    ],
+    'datatables.net-dt' => [
+        'version' => '2.2.1',
+    ],
+    'datatables.net-dt/css/dataTables.dataTables.min.css' => [
+        'version' => '2.2.1',
+        'type' => 'css',
+    ],
 ];

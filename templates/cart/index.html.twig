@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block body %}
+    {% include 'partials/navbar.html.twig' %}
+
+
+<div class="container-fluid table-cart">
+    <h5>Votre panier </h5> <p>gher</p>
+    {% for message in app.flashes('message') %}
+        <div class="alert alert-warning">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Produits</th>
+            <th>Cover</th>
+            <th class="text-end">Prix</th>
+            <th class="text-center">Quantité</th>
+            <th class="text-end">Total</th>
+            <th  class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for element in dataCart %}
+            <tr>
+                <td>{{ element.product.name }}</td>
+                <td>
+                    {% if element.product.cover %}
+                        <img
+                                src="{{ asset('uploads/' ~ element.product.cover) }}"
+                                alt="{{ element.product.name }}"
+                                width="50"
+                                height="50"
+                                class="product-cover"
+                        />
+                    {% else %}
+                        <p>No cover.</p>
+                    {% endif %}
+                </td>
+                <td class="text-end">{{ element.product.price }} Ar</td>
+                <td class="text-center">{{ element.quantity }}</td>
+                <td class="text-end">{{ element.quantity * element.product.price }} Ar </td>
+                <td  class="text-center">
+                    {% if element.quantity  < element.product.stock %}
+                         <a href="{{ path("cart_add",{id: element.product.id}) }}" class="btn btn-success">+</a>
+                     {% else %}
+                         <button class="btn btn-info btn-sm" disabled>Out of Stock</button>
+                    {% endif %}
+                    <a href="{{ path("cart_remove",{id: element.product.id}) }}" class="btn btn-warning">-</a>
+                    <a href="{{ path("cart_delete",{id: element.product.id}) }}" class="btn btn-danger">Supprimer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6" class="text-center">Votre panier est vide</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+         <tr>
+             <td colspan="4"><b>Total</b></td>
+             <td class="text-end"><b>{{ total }} Ar</b></td>
+             <td class="text-center">
+
+                 <a href="{{ path("cart_delete_all") }}" class="btn btn-danger">Vider le panier</a>
+             </td>
+         </tr>
+        </tfoot>
+    </table>
+    {% if dataCart is not empty %}
+        <a href="{{ path('app_orders_add') }}" class="btn btn-primary">Valider le panier</a>
+    {% endif %}
+
+
+
+</div>
+{% endblock %}

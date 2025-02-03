@@ -5,7 +5,7 @@ block body %}
   <div class="col-8">
     <h5>Product list |</h5>
 
-    {% if 'ROLE_ADMIN' in app.user.roles %}
+    {% if is_granted('ROLE_ADMIN') %}
     <button type="button" class="btn btn-primary">
       <a href="{{ path('app_product_new') }}" style="color: bisque"
         >Create new</a
@@ -19,7 +19,7 @@ block body %}
   </div>
 </div>
 
-<table class="table">
+<table class="table" id="product">
   <thead>
     <tr>
       <th>Id</th>
@@ -49,7 +49,7 @@ block body %}
           class="product-cover"
         />
         {% else %}
-        <p>No cover image available.</p>
+        <p>No cover image.</p>
         {% endif %}
       </td>
       <td>{{ product.stock }}</td>
@@ -62,8 +62,8 @@ block body %}
             >Show</a
           >
 
-          {% if app.user and (product.createdBy and app.user.username ==
-          product.createdBy.username or 'ROLE_ADMIN' in app.user.roles) %}
+          {% if is_granted('ROLE_ADMIN') %} {% if product.createdBy.username ==
+          app.user.username %}
 
           <a
             href="{{ path('app_product_edit', { id: product.id }) }}"
@@ -72,15 +72,13 @@ block body %}
           >
           {{ include("product/_delete_form.html.twig") }}
           {% else %}
-
           <button type="button" class="btn btn-outline-primary" disabled>
             Edit
           </button>
           <button type="button" class="btn btn-outline-secondary" disabled>
             Delete
           </button>
-
-          {% endif %}
+          {% endif %} {% endif %}
         </div>
       </td>
     </tr>
