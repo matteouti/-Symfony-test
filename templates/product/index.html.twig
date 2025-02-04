@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %} {% block title %}Product index{% endblock %} {%
 block body %}
-
-<div class="row">
+  {% include 'partials/navbarMain.html.twig' %}
+<div class="row productManager" >
   <div class="col-8">
     <h5>Product list |</h5>
 
@@ -13,10 +13,7 @@ block body %}
     </button>
     {% endif %}
   </div>
-  <div class="col-4">
-    Logged in as: <strong>{{ app.user.userIdentifier }}</strong> |
-    <a href="{{ path('app_logout') }}" class="btn btn-primary">Logout</a>
-  </div>
+
 </div>
 
   <table id="product" class="table table-striped">
