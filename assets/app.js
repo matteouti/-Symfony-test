@@ -31,20 +31,17 @@ function initDataTable() {
     console.warn("DataTables initialization skipped: #product is not a table.");
   }
 
-  if (tableOrders && tableOrders.tagName === "TABLE") { // Ensure it's a <table>
-    if ($.fn.DataTable.isDataTable("#orders")) {
-      $("#odrers").DataTable().destroy(); // Destroy existing DataTable instance
-    }
-    $("#orders").DataTable({
-      responsive: true,
-      autoWidth: false,
-      paging: true,
-      searching: true,
-      ordering: true,
-    });
-  } else {
-    console.warn("DataTables initialization skipped: #product is not a table.");
+
+
+  if (!$.fn.DataTable.isDataTable('#orders')) {
+    $('#orders').DataTable();
   }
+
+  if (!$.fn.DataTable.isDataTable('#users')) {
+    $('#users').DataTable();
+  }
+
+
 }
 
 // Run on initial page load

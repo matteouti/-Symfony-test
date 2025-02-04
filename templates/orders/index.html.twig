@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello OrdersController!{% endblock %}
+{% block title %}Orders details{% endblock %}
 
 {% block body %}
+    {% include 'partials/navbarMain.html.twig' %}
 
+    <div class="container-fluid order">
 
-    <div class="container-fluid">
-
-         <table class="table" id="orders">
+         <table id="orders" class="table table-striped">
             <thead>
                 <tr>
                     <th>Commande</th>

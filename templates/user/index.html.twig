@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %} {% block title %}User index{% endblock %} {%
 block body %}
+  {% include 'partials/navbarMain.html.twig' %}
 <div class="container-fluid">
   <div>
     <h1>User list</h1>
@@ -8,7 +9,7 @@ block body %}
     >
   </div>
   <div>
-    <table class="table">
+    <table class="table table-striped" id="users">
       <thead>
         <tr>
           <th>Id</th>
