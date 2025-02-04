@@ -16,19 +16,29 @@ class ProductServices
     ) {
     }
 
-    public function uploadCover($coverFile): ?string
+    public function uploadCover(Product $product, $coverFile): ?string
     {
-        if ($coverFile) {
+        $uploadDirectory = __DIR__ . '/../../public/uploads';
 
+        if ($coverFile) {
+            // Retrieve old cover before updating
+            $oldCover = $product->getCover();
+
+            // Generate new filename
             $originalFilename = pathinfo($coverFile->getClientOriginalName(), PATHINFO_FILENAME);
             $safeFilename     = $this->slugger->slug($originalFilename);
             $newFilename      = $safeFilename . '-' . uniqid() . '.' . $coverFile->guessExtension();
 
             try {
-                $coverFile->move(
-                    __DIR__ . '/../../public/uploads',
-                    $newFilename
-                );
+                $coverFile->move($uploadDirectory, $newFilename);
+
+                // Delete old cover if it exists
+                if ($oldCover && file_exists($uploadDirectory . '/' . $oldCover)) {
+                    unlink($uploadDirectory . '/' . $oldCover);
+                }
+
+                // Update product cover
+                $product->setCover($newFilename);
             } catch (FileException $e) {
                 return null;
             }
@@ -47,7 +57,15 @@ class ProductServices
 
     public function delete(Product $product): void
     {
-  
+        $uploadDirectory = __DIR__ . '/../../public/uploads';
+
+        if ($product->getCover() !== null) {
+            $imagePath = $uploadDirectory . '/' . $product->getCover();
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
         $this->entityManager->remove($product);
         $this->entityManager->flush();
     }

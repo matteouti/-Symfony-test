@@ -38,6 +38,7 @@ return [
     'bootstrap-icons/font/bootstrap-icons.min.css' => [
         'version' => '1.11.3',
         'type' => 'css',
+        'entrypoint' => true, // ✅ Add this line
     ],
     'datatables.net' => [
         'version' => '2.2.1',

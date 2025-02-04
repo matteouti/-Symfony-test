@@ -50,7 +50,7 @@ final class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $coverFile   = $form->get('cover')->getData();
-            $newFilename = $this->productServices->uploadCover($coverFile);
+            $newFilename = $this->productServices->uploadCover($product,$coverFile);
 
             if ($newFilename) {
                 $product->setCover($newFilename);
@@ -84,6 +84,12 @@ final class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             //$entityManager->flush();
+            $coverFile   = $form->get('cover')->getData();
+            $newFilename = $this->productServices->uploadCover($product,$coverFile);
+
+            if ($newFilename) {
+                $product->setCover($newFilename);
+            }
             $this->productServices->update();
 
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);

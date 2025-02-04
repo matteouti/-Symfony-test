@@ -2,6 +2,8 @@ import "./bootstrap.js";
 import "bootstrap";
 //import "bootstrap-icons";
 
+
+
 import "./styles/app.css";
 import $ from "jquery";
 import "datatables.net";
@@ -11,11 +13,49 @@ import "datatables.net";
 
 console.log("This log comes from assets/app.js - welcome to AssetMapper! 🎉");
 
-document.addEventListener("DOMContentLoaded", function () {
-  const table = document.querySelector("#product"); // Remplacez par l'ID de votre table
-  if (table) {
-    $(table).DataTable();
+function initDataTable() {
+  const table = document.querySelector("#product");
+  const tableOrders = document.querySelector("#orders");
+  if (table && table.tagName === "TABLE") { // Ensure it's a <table>
+    if ($.fn.DataTable.isDataTable("#product")) {
+      $("#product").DataTable().destroy(); // Destroy existing DataTable instance
+    }
+    $("#product").DataTable({
+      responsive: true,
+      autoWidth: false,
+      paging: true,
+      searching: true,
+      ordering: true,
+    });
+  } else {
+    console.warn("DataTables initialization skipped: #product is not a table.");
   }
+
+  if (tableOrders && tableOrders.tagName === "TABLE") { // Ensure it's a <table>
+    if ($.fn.DataTable.isDataTable("#orders")) {
+      $("#odrers").DataTable().destroy(); // Destroy existing DataTable instance
+    }
+    $("#orders").DataTable({
+      responsive: true,
+      autoWidth: false,
+      paging: true,
+      searching: true,
+      ordering: true,
+    });
+  } else {
+    console.warn("DataTables initialization skipped: #product is not a table.");
+  }
+}
+
+// Run on initial page load
+document.addEventListener("DOMContentLoaded", function () {
+  initDataTable();
 });
+
+// Run again when Turbo Drive loads a new page (if Symfony UX Turbo is enabled)
+document.addEventListener("turbo:load", function () {
+  initDataTable();
+});
+
 
 console.log("*******************************************");
